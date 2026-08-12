@@ -44,3 +44,8 @@
 
 ## 輸出
 - 完整履歷：`resume-en.md`
+- HTML 編輯器：`resume-au.html`（通用引擎，無 preset 分支邏輯）
+- Preset 資料：`resume-presets.js`（新增 preset = 在 `catalog` 加一筆）
+  - 下拉選單由 catalog 自動產生
+  - Reset = 重載目前選中的 preset
+  - storage key：`resume-au-v2`

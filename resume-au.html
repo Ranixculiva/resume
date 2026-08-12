@@ -58,6 +58,16 @@
       margin-right: 0.35rem;
     }
 
+    .toolbar .preset-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .toolbar .preset-wrap .label {
+      margin-right: 0;
+    }
+
     .toolbar button,
     .toolbar select {
       font: inherit;
@@ -428,10 +438,14 @@
   <div class="toolbar" id="toolbar">
     <span class="label">Resume</span>
     <button type="button" id="btnEdit">Edit mode</button>
+    <label class="preset-wrap" for="presetSelect">
+      <span class="label">Preset</span>
+      <select id="presetSelect" title="Switch tailored resume version"></select>
+    </label>
     <button type="button" id="btnPrint">Print / PDF</button>
     <div class="spacer"></div>
     <span class="status" id="saveStatus">Ready</span>
-    <button type="button" id="btnReset" class="ghost-danger" title="Reset to default content">Reset</button>
+    <button type="button" id="btnReset" class="ghost-danger" title="Reset to selected preset">Reset</button>
   </div>
 
   <main class="page" id="resume">
@@ -488,88 +502,18 @@
       </div>
     </section>
 
-    <p class="hint">Edit mode: drag ⋮⋮ to reorder sections / jobs / bullets. Changes auto-save in this browser. Print hides editor chrome.</p>
+    <p class="hint">Choose a preset, then edit if needed. Drag ⋮⋮ in Edit mode to reorder. Changes auto-save in this browser. Print hides editor chrome.</p>
   </main>
 
+  <script src="./resume-presets.js"></script>
   <script>
-    const STORAGE_KEY = "resume-au-v1";
+    const PresetStore = window.ResumePresetData;
+    if (!PresetStore) {
+      throw new Error("resume-presets.js failed to load");
+    }
 
-    const DEFAULT_DATA = {
-      name: "HAO YU LIN",
-      tagline: "Working Holiday — Hospitality · Retail · Operations",
-      email: "john220john220@gmail.com",
-      location: "Australia · Available for local work",
-      languages: "EN · ZH · ID",
-      summaryTitle: "Professional Summary",
-      experienceTitle: "Work Experience",
-      educationTitle: "Education",
-      skillsTitle: "Skills & Certifications",
-      summary:
-        "Adaptable professional with paid kitchen experience, cross-cultural sales and team-building, and degrees in Mathematics and Computer Science. Comfortable in fast-paced service environments, quick to learn new processes, and effective with multicultural teams. Seeking flexible Working Holiday roles across hospitality, retail, warehouse, farm, and customer-facing work.",
-      sectionOrder: ["summary", "experience", "education", "skills"],
-      jobs: [
-        {
-          id: "job-cook",
-          title: "Cook",
-          dates: "Jun 2025 – Jul 2026",
-          org: "Omelette (Brunch Restaurant)",
-          note: "",
-          bullets: [
-            "Prepared omelettes, pasta, and scrambled eggs during weekend brunch service (07:30–16:00).",
-            "Produced approximately 20–30 omelettes per shift while keeping quality and ticket speed steady.",
-            "Supported full kitchen operations: prep, dishwashing, peak-hour plating, and cleaning.",
-            "Trained 3 team members on omelette preparation and kitchen workflow."
-          ]
-        },
-        {
-          id: "job-ufo",
-          title: "UnFranchise Owner (UFO)",
-          dates: "Feb 2025 – Present",
-          org: "Market America",
-          note: "Independent UnFranchise Owner operating own retail and team-building business with Market America: product retailing, customer follow-up, recruiting, and training support (not an employee role).",
-          bullets: [
-            "Built relationships across Malaysia, Indonesia, Taiwan, and Singapore; identified needs and presented products or partnership opportunities.",
-            "Joined English-language meetings on foundational training, show plans, product sharing, and customer follow-up.",
-            "Closed an Indonesian-market support gap by arranging Indonesian-language training via company education resources, connecting Indonesian speakers, and co-hosting meetings (ABC meeting pattern — role B).",
-            "Recruited 1 Indonesian partner; supported other teams with Indonesian recruitment; another Indonesian partner is planning to join in October 2026."
-          ]
-        },
-        {
-          id: "job-military",
-          title: "Welfare Committee Member",
-          dates: "May 2021 – Aug 2021",
-          org: "Military Service",
-          note: "",
-          bullets: [
-            "Managed home-leave / return shuttle logistics for 100+ personnel: pickup registration, fare tracking, evening cash collection, and reconciliation.",
-            "Replaced manual roll-call and hand totals with Google Forms linked to Excel; printed records for camp use (no on-site computers).",
-            "Improved collection speed, reduced queuing, and lowered counting errors."
-          ]
-        }
-      ],
-      education: [
-        {
-          id: "edu-ms",
-          degree: "M.S. in Computer Science",
-          school: "National Tsing Hua University, Taiwan",
-          dates: "2021 – 2023"
-        },
-        {
-          id: "edu-bs",
-          degree: "B.S. in Mathematics",
-          school: "National Tsing Hua University, Taiwan",
-          dates: "2016 – 2020"
-        }
-      ],
-      skills: [
-        { id: "sk-1", label: "Kitchen", text: "Omelettes, pasta, egg dishes, prep, cleaning, peak service" },
-        { id: "sk-2", label: "People", text: "Cross-cultural communication & facilitation (EN / ZH / ID)" },
-        { id: "sk-3", label: "Business", text: "Retail support, customer follow-up, team recruitment & training" },
-        { id: "sk-4", label: "Tools", text: "Google Forms, Excel" },
-        { id: "sk-5", label: "Licence", text: "Manual transmission — small vehicle" },
-        { id: "sk-6", label: "Certificate", text: "Chinese Cuisine (non-vegetarian), Class C" }
-      ]
-    };
+    const STORAGE_KEY = PresetStore.storageKey;
+    const DEFAULT_PRESET_ID = PresetStore.defaultId;
 
     let data = loadData();
     let editing = false;
@@ -584,22 +528,82 @@
       btnEdit: document.getElementById("btnEdit"),
       btnPrint: document.getElementById("btnPrint"),
       btnReset: document.getElementById("btnReset"),
-      saveStatus: document.getElementById("saveStatus")
+      saveStatus: document.getElementById("saveStatus"),
+      presetSelect: document.getElementById("presetSelect")
     };
 
     function uid(prefix) {
       return prefix + "-" + Math.random().toString(36).slice(2, 9);
     }
 
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function cloneDefaultDocument() {
+      return PresetStore.buildDocument(DEFAULT_PRESET_ID);
+    }
+
     function loadData() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return structuredClone(DEFAULT_DATA);
+        if (!raw) return cloneDefaultDocument();
         const parsed = JSON.parse(raw);
-        return { ...structuredClone(DEFAULT_DATA), ...parsed };
+        const base = cloneDefaultDocument();
+        const presetId =
+          parsed.presetId && PresetStore.getById(parsed.presetId)
+            ? parsed.presetId
+            : DEFAULT_PRESET_ID;
+        return { ...base, ...parsed, presetId };
       } catch {
-        return structuredClone(DEFAULT_DATA);
+        return cloneDefaultDocument();
       }
+    }
+
+    function fillPresetSelect() {
+      el.presetSelect.innerHTML = PresetStore.catalog
+        .map(
+          (p) =>
+            `<option value="${escapeHtml(p.id)}">${escapeHtml(p.label)}</option>`
+        )
+        .join("");
+    }
+
+    function presetLabel(id) {
+      return PresetStore.getById(id)?.label || id;
+    }
+
+    function syncPresetSelect() {
+      const id = PresetStore.getById(data.presetId)
+        ? data.presetId
+        : DEFAULT_PRESET_ID;
+      el.presetSelect.value = id;
+    }
+
+    function applyPreset(id, { confirmReplace = true } = {}) {
+      const entry = PresetStore.getById(id);
+      if (!entry) {
+        syncPresetSelect();
+        return;
+      }
+      if (
+        confirmReplace &&
+        !confirm(
+          `Load the “${entry.label}” preset?\n\nThis replaces the current resume content (your browser copy of other presets is not kept separately).`
+        )
+      ) {
+        syncPresetSelect();
+        return;
+      }
+      data = PresetStore.buildDocument(entry.id);
+      scheduleSave();
+      renderLists();
+      syncPresetSelect();
+      el.saveStatus.textContent = "Preset: " + entry.label;
     }
 
     function scheduleSave() {
@@ -728,14 +732,6 @@
         </div>`
         )
         .join("");
-    }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;");
     }
 
     function bindEditableSync() {
@@ -1060,15 +1056,19 @@
 
     el.btnEdit.addEventListener("click", () => setEditing(!editing));
     el.btnPrint.addEventListener("click", () => window.print());
+    el.presetSelect.addEventListener("change", () => {
+      applyPreset(el.presetSelect.value, { confirmReplace: true });
+    });
     el.btnReset.addEventListener("click", () => {
-      if (!confirm("Reset resume to the default general version? Your local edits will be cleared.")) return;
-      localStorage.removeItem(STORAGE_KEY);
-      data = structuredClone(DEFAULT_DATA);
-      scheduleSave();
-      renderLists();
+      const id = el.presetSelect.value || data.presetId || DEFAULT_PRESET_ID;
+      const label = presetLabel(id);
+      if (!confirm(`Reset to the “${label}” preset?\n\nLocal edits for this browser copy will be cleared.`)) return;
+      applyPreset(id, { confirmReplace: false });
       el.saveStatus.textContent = "Reset";
     });
 
+    fillPresetSelect();
+    syncPresetSelect();
     renderLists();
     setEditing(false);
   </script>
