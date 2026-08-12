@@ -1,6 +1,3 @@
-# Local tooling (portable gh CLI, etc.)
-.tools/
-
 # macOS
 .DS_Store
 
