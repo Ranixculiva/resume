@@ -1,0 +1,11 @@
+# Local tooling (portable gh CLI, etc.)
+.tools/
+
+# macOS
+.DS_Store
+
+# Exported resume previews (optional local files)
+HAO YU LIN — Resume.jpg
+HAO YU LIN — Resume.pdf
+*.jpg
+*.pdf
