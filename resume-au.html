@@ -644,6 +644,8 @@
     }
 
     function renderLists() {
+      const scrollX = window.scrollX;
+      const scrollY = window.scrollY;
       applyHeaderFields();
       renderSectionOrder();
       renderJobs();
@@ -651,18 +653,28 @@
       renderSkills();
       bindEditableSync();
       bindDragAndDrop();
+      // Replacing list DOM drops focus and can jump the viewport to the top.
+      window.scrollTo(scrollX, scrollY);
+      requestAnimationFrame(() => window.scrollTo(scrollX, scrollY));
     }
 
     function renderSectionOrder() {
       const order = data.sectionOrder || ["summary", "experience", "education", "skills"];
       const header = el.resume.querySelector(".resume-header");
       const hint = el.resume.querySelector(".hint");
-      order.forEach((id) => {
-        const sec = el.resume.querySelector(`[data-section="${id}"]`);
-        if (sec) el.resume.insertBefore(sec, hint);
+      const desired = [
+        header,
+        ...order.map((id) => el.resume.querySelector(`[data-section="${id}"]`)),
+        hint
+      ].filter(Boolean);
+
+      // Only move nodes when order actually changed — insertBefore on every
+      // render can force the browser to scroll the header into view.
+      desired.forEach((node, i) => {
+        if (el.resume.children[i] !== node) {
+          el.resume.insertBefore(node, el.resume.children[i] || null);
+        }
       });
-      // ensure header stays first
-      el.resume.insertBefore(header, el.resume.firstChild);
     }
 
     function renderJobs() {
