@@ -55,7 +55,8 @@
       margin-right: 0.2rem;
     }
 
-    .toolbar button {
+    .toolbar button,
+    .toolbar a {
       font: inherit;
       font-size: 0.85rem;
       border: 1px solid rgba(255,255,255,0.22);
@@ -64,9 +65,11 @@
       border-radius: 6px;
       padding: 0.35rem 0.7rem;
       cursor: pointer;
+      text-decoration: none;
     }
 
-    .toolbar button:hover { background: rgba(255,255,255,0.16); }
+    .toolbar button:hover,
+    .toolbar a:hover { background: rgba(255,255,255,0.16); }
 
     .stage {
       max-width: 980px;
@@ -398,6 +401,7 @@
     <button type="button" id="printFront">Print front</button>
     <button type="button" id="printBack">Print back</button>
     <button type="button" id="printProof">Print A4 proof</button>
+    <a href="digital-card.html">Digital card</a>
   </div>
 
   <main class="stage">

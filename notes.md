@@ -67,3 +67,4 @@
 - 商店：`{my|id|sg|tw|hk|au}.marketamerica.com/ranix`
 - 國旗：4:3 長方形，背面 2 列 × 3 欄（MY ID SG / TW HK AU）
 - 正面 QR：WhatsApp（趕路時最容易立刻傳訊）
+- 電子名片：`digital-card.html` + `ranix.vcf`（手機直式、WhatsApp／加入通訊錄／分享連結）
