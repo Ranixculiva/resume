@@ -45,7 +45,25 @@
 ## 輸出
 - 完整履歷：`resume-en.md`
 - HTML 編輯器：`resume-au.html`（通用引擎，無 preset 分支邏輯）
-- Preset 資料：`resume-presets.js`（新增 preset = 在 `catalog` 加一筆）
-  - 下拉選單由 catalog 自動產生
-  - Reset = 重載目前選中的 preset
-  - storage key：`resume-au-v2`
+- Preset 資料：`resume-presets.js`（內建 preset = 在 `catalog` 加一筆）
+  - 下拉選單 = 內建 catalog + 瀏覽器自訂 presets
+  - `+ Preset`：把目前履歷存成自訂 preset（localStorage）
+  - `Delete preset`：只能刪自訂；內建不可刪
+  - Reset = 重載目前選中的 preset（自訂會回到該 preset 上次儲存快照）
+  - storage key：`resume-au-v2`；自訂 presets：`resume-au-v2-custom-presets`
+
+## 美安名片 ⏳ 第一版
+- 檔案：`business-card.html`
+- Logo：可以用 Market America 官方圖標，但須標「獨立超連鎖店主」；自製名片建議送 `ad-request@markettaiwan.com.tw` 書面核准（手冊第 19 章、IUA&A 商標條款）
+- 場景：被陌生人指路／看路線時幫忙；對方趕著走 → 想留名片，之後可寄 trial package
+- 語言：中英雙語
+- 名字：**主名 HAO YU LIN／林晧與**，暱稱 **Ranix**（對應網址與 LINE/IG）
+- 職稱：Shopping Consultant／購物顧問；小字 Independent UnFranchise Owner／獨立超連鎖店主 · 美安
+- 禁止：SHOP.COM 字眼（公司將更新／賣掉該網域）
+- Logo：可放官方圖標，前提是清楚標獨立身分；自製成品建議送審後再印
+- Email：john220john220@gmail.com
+- Phone / WhatsApp：+886 978 242 420
+- LINE / IG：ranixculiva
+- 商店：`{my|id|sg|tw|hk|au}.marketamerica.com/ranix`
+- 國旗：4:3 長方形，背面 2 列 × 3 欄（MY ID SG / TW HK AU）
+- 正面 QR：WhatsApp（趕路時最容易立刻傳訊）
