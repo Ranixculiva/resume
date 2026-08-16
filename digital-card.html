@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1f3a" />
+  <meta name="description" content="HAO YU LIN · 林晧與 · Ranix — Shopping Consultant / 購物顧問" />
+  <title>林晧與 · Ranix — Digital card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Noto+Sans+TC:wght@400;500;600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --blue: #1d5f9c;
+      --paper: #fffdfa;
+      --muted: #5c6570;
+      --line: rgba(11, 31, 58, 0.14);
+      --gold: #b0894f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Outfit", "Noto Sans TC", system-ui, sans-serif;
+      color: var(--navy);
+      min-height: 100vh;
+      background:
+        radial-gradient(700px 360px at 12% -8%, #e8eef6 0%, transparent 55%),
+        radial-gradient(560px 320px at 100% 0%, #efe8dc 0%, transparent 48%),
+        #eef1f4;
+      padding: 1.25rem 1rem 6.5rem;
+    }
+
+    .sheet {
+      max-width: 430px;
+      margin: 0 auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 18px 44px rgba(11, 31, 58, 0.1);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .sheet::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 7px;
+      background: linear-gradient(180deg, var(--navy), var(--blue));
+    }
+
+    header {
+      padding: 1.45rem 1.3rem 1.15rem 1.55rem;
+    }
+
+    .kicker {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--blue);
+      font-weight: 600;
+      margin-bottom: 0.55rem;
+    }
+
+    .name-en {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.05;
+    }
+
+    .name-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.35rem 0.7rem;
+      margin: 0.4rem 0 0.7rem;
+    }
+
+    .name-zh {
+      font-weight: 650;
+      letter-spacing: 0.16em;
+    }
+
+    .nick {
+      color: var(--blue);
+      font-weight: 650;
+    }
+
+    .nick::before {
+      content: "·";
+      margin-right: 0.55rem;
+      color: var(--gold);
+    }
+
+    .title-en { font-weight: 650; }
+    .title-zh { color: var(--muted); font-size: 0.92rem; margin-top: 0.1rem; }
+
+    .rule {
+      width: 2.4rem;
+      height: 3px;
+      background: var(--gold);
+      border: 0;
+      margin: 0.85rem 0 0.7rem;
+    }
+
+    .legal {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .actions {
+      display: grid;
+      gap: 0.55rem;
+      padding: 0 1.2rem 1.2rem 1.45rem;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 0.78rem 0.9rem;
+      font: inherit;
+      font-size: 0.95rem;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+    }
+
+    .btn strong { font-weight: 650; display: block; }
+    .btn span { color: var(--muted); font-size: 0.78rem; }
+    .btn:hover { border-color: var(--blue); }
+
+    .btn.primary {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
+
+    .btn.primary span { color: rgba(255,255,255,0.72); }
+
+    .pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem;
+    }
+
+    .shops {
+      padding: 1.05rem 1.2rem 1.35rem 1.45rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .shops h2 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.05rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+
+    .shops h2 small {
+      font-family: "Noto Sans TC", sans-serif;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .pattern {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin: 0.35rem 0 0.85rem;
+    }
+
+    .pattern strong { color: var(--blue); }
+
+    .flags {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem 0.75rem;
+    }
+
+    .flag {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.28rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .flag img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 5px;
+      border: 1px solid var(--line);
+      display: block;
+    }
+
+    .flag span {
+      font-size: 0.72rem;
+      font-weight: 650;
+      letter-spacing: 0.06em;
+    }
+
+    .print-link {
+      display: block;
+      text-align: center;
+      padding: 0.85rem 1rem 1.2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .print-link:hover { color: var(--navy); }
+
+    .dock {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem;
+      padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom));
+      background: rgba(238, 241, 244, 0.92);
+      backdrop-filter: blur(10px);
+    }
+
+    .dock .btn { margin: 0; }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .dock, .print-link { display: none; }
+      .sheet { box-shadow: none; max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <article class="sheet">
+    <header>
+      <p class="kicker">美安 · Independent</p>
+      <h1 class="name-en">HAO YU LIN</h1>
+      <p class="name-row">
+        <span class="name-zh">林晧與</span>
+        <span class="nick">Ranix</span>
+      </p>
+      <p class="title-en">Shopping Consultant</p>
+      <p class="title-zh">購物顧問</p>
+      <hr class="rule" />
+      <p class="legal">Independent UnFranchise Owner · 獨立超連鎖店主<br />美安 Market America</p>
+    </header>
+
+    <div class="actions">
+      <a class="btn primary" href="https://wa.me/886978242420">
+        <div>
+          <strong>WhatsApp</strong>
+          <span>+886 978 242 420</span>
+        </div>
+      </a>
+      <div class="pair">
+        <a class="btn" href="tel:+886978242420">
+          <div>
+            <strong>Call</strong>
+            <span>電話</span>
+          </div>
+        </a>
+        <a class="btn" href="ranix.vcf">
+          <div>
+            <strong>Save</strong>
+            <span>加入通訊錄</span>
+          </div>
+        </a>
+      </div>
+      <a class="btn" href="https://line.me/R/ti/p/~ranixculiva">
+        <div>
+          <strong>LINE</strong>
+          <span>ranixculiva</span>
+        </div>
+      </a>
+      <a class="btn" href="https://instagram.com/ranixculiva">
+        <div>
+          <strong>Instagram</strong>
+          <span>ranixculiva</span>
+        </div>
+      </a>
+      <a class="btn" href="mailto:john220john220@gmail.com">
+        <div>
+          <strong>Email</strong>
+          <span>john220john220@gmail.com</span>
+        </div>
+      </a>
+      <button class="btn" type="button" id="shareBtn">
+        <div>
+          <strong>Share this card</strong>
+          <span>分享電子名片</span>
+        </div>
+      </button>
+    </div>
+
+    <section class="shops">
+      <h2>My shops <small>各國商店</small></h2>
+      <p class="pattern"><strong>{country}</strong>.marketamerica.com/ranix</p>
+      <div class="flags">
+        <a class="flag" href="https://my.marketamerica.com/ranix"><img src="flags/my.svg" alt="Malaysia" /><span>MY</span></a>
+        <a class="flag" href="https://id.marketamerica.com/ranix"><img src="flags/id.svg" alt="Indonesia" /><span>ID</span></a>
+        <a class="flag" href="https://sg.marketamerica.com/ranix"><img src="flags/sg.svg" alt="Singapore" /><span>SG</span></a>
+        <a class="flag" href="https://tw.marketamerica.com/ranix"><img src="flags/tw.svg" alt="Taiwan" /><span>TW</span></a>
+        <a class="flag" href="https://hk.marketamerica.com/ranix"><img src="flags/hk.svg" alt="Hong Kong" /><span>HK</span></a>
+        <a class="flag" href="https://au.marketamerica.com/ranix"><img src="flags/au.svg" alt="Australia" /><span>AU</span></a>
+      </div>
+    </section>
+
+    <a class="print-link" href="business-card.html">Paper card layout · 紙本排版</a>
+  </article>
+
+  <div class="dock">
+    <a class="btn primary" href="https://wa.me/886978242420">WhatsApp</a>
+    <a class="btn" href="ranix.vcf">Save contact</a>
+  </div>
+
+  <script>
+    const shareBtn = document.getElementById("shareBtn");
+    shareBtn.addEventListener("click", async () => {
+      const payload = {
+        title: "林晧與 · Ranix",
+        text: "Shopping Consultant / 購物顧問",
+        url: location.href
+      };
+      try {
+        if (navigator.share) {
+          await navigator.share(payload);
+          return;
+        }
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+      }
+      try {
+        await navigator.clipboard.writeText(location.href);
+        shareBtn.querySelector("span").textContent = "已複製連結";
+      } catch {
+        shareBtn.querySelector("span").textContent = location.href;
+      }
+    });
+  </script>
+</body>
+</html>
