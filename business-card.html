@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>林晧與 · Ranix — Business Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Noto+Sans+TC:wght@400;500;600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --blue: #1d5f9c;
+      --cream: #f6f1e8;
+      --paper: #fffdfa;
+      --muted: #5c6570;
+      --line: rgba(11, 31, 58, 0.14);
+      --gold: #b0894f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Outfit", "Noto Sans TC", system-ui, sans-serif;
+      background:
+        radial-gradient(900px 420px at 10% -10%, #e8eef6 0%, transparent 55%),
+        radial-gradient(700px 380px at 100% 0%, #efe8dc 0%, transparent 50%),
+        #eef1f4;
+      color: var(--navy);
+      min-height: 100vh;
+      padding: 4.6rem 1rem 3rem;
+    }
+
+    .toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      align-items: center;
+      padding: 0.65rem 1rem;
+      background: rgba(11, 31, 58, 0.94);
+      color: #fff;
+      backdrop-filter: blur(8px);
+    }
+
+    .toolbar .label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-right: 0.2rem;
+    }
+
+    .toolbar button {
+      font: inherit;
+      font-size: 0.85rem;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border-radius: 6px;
+      padding: 0.35rem 0.7rem;
+      cursor: pointer;
+    }
+
+    .toolbar button:hover { background: rgba(255,255,255,0.16); }
+
+    .stage {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    h1.page-title {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 650;
+      margin-bottom: 0.35rem;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.4rem;
+      max-width: 58ch;
+    }
+
+    .spread {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.4rem 1.8rem;
+      align-items: flex-start;
+    }
+
+    .side {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .side .caption {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .card-wrap {
+      width: 90mm;
+      filter: drop-shadow(0 16px 28px rgba(11, 31, 58, 0.14));
+    }
+
+    .card {
+      width: 90mm;
+      height: 54mm;
+      background: var(--paper);
+      position: relative;
+      overflow: hidden;
+      border-radius: 1.2mm;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 2.1mm;
+      background: linear-gradient(180deg, var(--navy), var(--blue));
+    }
+
+    .front, .back {
+      height: 100%;
+      padding: 4.2mm 5mm 4mm 6.2mm;
+    }
+
+    .front {
+      display: grid;
+      grid-template-columns: 1fr 18.5mm;
+      gap: 3.2mm;
+      align-items: start;
+    }
+
+    .kicker {
+      font-size: 5.2pt;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      font-weight: 600;
+      margin-bottom: 1.4mm;
+    }
+
+    .name-en {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 13.4pt;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+
+    .name-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 1.6mm 2.4mm;
+      margin: 1.2mm 0 2.1mm;
+    }
+
+    .name-zh {
+      font-family: "Noto Sans TC", sans-serif;
+      font-size: 8.2pt;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+    }
+
+    .nick {
+      font-size: 8pt;
+      font-weight: 650;
+      color: var(--blue);
+      letter-spacing: 0.06em;
+    }
+
+    .nick::before {
+      content: "·";
+      margin-right: 2mm;
+      color: var(--gold);
+    }
+
+    .title-en {
+      font-size: 7.4pt;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .title-zh {
+      font-family: "Noto Sans TC", sans-serif;
+      font-size: 6.8pt;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-top: 0.3mm;
+    }
+
+    .rule {
+      height: 0.35mm;
+      width: 14mm;
+      background: var(--gold);
+      margin: 2.2mm 0 2.3mm;
+      border: 0;
+    }
+
+    .contacts {
+      display: grid;
+      gap: 0.85mm;
+      font-size: 6.6pt;
+      letter-spacing: 0.01em;
+    }
+
+    .contacts a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .contacts .handle {
+      font-weight: 600;
+    }
+
+    .fine {
+      margin-top: 2.1mm;
+      font-size: 5.1pt;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      line-height: 1.35;
+    }
+
+    .qr-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1.1mm;
+      padding-top: 0.4mm;
+    }
+
+    a.qr-col { text-decoration: none; color: inherit; }
+
+    .qr-col img {
+      width: 16.8mm;
+      height: 16.8mm;
+      display: block;
+    }
+
+    .qr-label {
+      font-size: 4.7pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .back {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .back-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 3mm;
+    }
+
+    .back-head h2 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 8.5pt;
+      font-weight: 650;
+    }
+
+    .back-head p {
+      font-family: "Noto Sans TC", sans-serif;
+      font-size: 7pt;
+      color: var(--muted);
+    }
+
+    .url-pattern {
+      font-size: 6.2pt;
+      color: var(--navy);
+      letter-spacing: 0.01em;
+      margin-top: 0.6mm;
+    }
+
+    .url-pattern strong {
+      font-weight: 650;
+      color: var(--blue);
+    }
+
+    .flags {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8mm 3.2mm;
+      margin: 1.8mm 0 0;
+    }
+
+    .flag {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7mm;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .flag-rect {
+      width: 14.5mm;
+      aspect-ratio: 4 / 3;
+      border-radius: 0.35mm;
+      overflow: hidden;
+      border: 0.2mm solid var(--line);
+      box-shadow: 0 0.3mm 0.9mm rgba(11, 31, 58, 0.08);
+    }
+
+    .flag-rect img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .flag span {
+      font-size: 5.2pt;
+      font-weight: 650;
+      letter-spacing: 0.06em;
+    }
+
+    .back-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 3mm;
+      border-top: 0.25mm solid var(--line);
+      padding-top: 1.8mm;
+    }
+
+    .back-footer .id {
+      font-size: 6.3pt;
+      font-weight: 600;
+    }
+
+    .back-footer .legal {
+      font-size: 4.9pt;
+      color: var(--muted);
+      text-align: right;
+      line-height: 1.35;
+      max-width: 48mm;
+    }
+
+    .hint {
+      margin-top: 1.6rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .hint code {
+      font-size: 0.78em;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 0.05em 0.35em;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .toolbar, .page-title, .lead, .hint, .caption { display: none !important; }
+      .stage, .spread, .side, .card-wrap { margin: 0; filter: none; max-width: none; }
+      .card { border-radius: 0; }
+      body.print-front .back-side,
+      body.print-back .front-side { display: none !important; }
+      body.print-front .spread,
+      body.print-back .spread {
+        display: block;
+      }
+      body.print-proof .spread { gap: 12mm; padding: 18mm; }
+    }
+
+    @media (max-width: 720px) {
+      .card-wrap { transform-origin: top left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <span class="label">Card</span>
+    <button type="button" id="printFront">Print front</button>
+    <button type="button" id="printBack">Print back</button>
+    <button type="button" id="printProof">Print A4 proof</button>
+  </div>
+
+  <main class="stage">
+    <h1 class="page-title">Shopping consultant card</h1>
+    <p class="lead">90 × 54 mm. Front is identity for a hurried handoff; back uses country flags for each Market America shop. No SHOP.COM. Official logo omitted so this stays an independent-owner card.</p>
+
+    <div class="spread">
+      <div class="side front-side">
+        <p class="caption">Front</p>
+        <div class="card-wrap">
+          <article class="card">
+            <div class="front">
+              <div>
+                <p class="kicker">美安 · Independent</p>
+                <p class="name-en">HAO YU LIN</p>
+                <p class="name-row">
+                  <span class="name-zh">林晧與</span>
+                  <span class="nick">Ranix</span>
+                </p>
+                <p class="title-en">Shopping Consultant</p>
+                <p class="title-zh">購物顧問</p>
+                <hr class="rule" />
+                <div class="contacts">
+                  <a href="tel:+886978242420">+886 978 242 420</a>
+                  <div><span class="handle">LINE / IG</span> <a href="https://instagram.com/ranixculiva">ranixculiva</a></div>
+                  <a href="mailto:john220john220@gmail.com">john220john220@gmail.com</a>
+                </div>
+                <p class="fine">Independent UnFranchise Owner · 獨立超連鎖店主<br />美安 Market America</p>
+              </div>
+              <a class="qr-col" href="https://wa.me/886978242420">
+                <img src="qr-whatsapp.svg" width="96" height="96" alt="WhatsApp QR code" />
+                <p class="qr-label">WhatsApp</p>
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="side back-side">
+        <p class="caption">Back</p>
+        <div class="card-wrap">
+          <article class="card">
+            <div class="back">
+              <div>
+                <div class="back-head">
+                  <h2>My shops</h2>
+                  <p>各國商店</p>
+                </div>
+                <p class="url-pattern"><strong>{country}</strong>.marketamerica.com/ranix</p>
+                <div class="flags">
+                  <a class="flag" href="https://my.marketamerica.com/ranix" title="Malaysia">
+                    <span class="flag-rect"><img src="flags/my.svg" alt="Malaysia" width="640" height="480" /></span>
+                    <span>MY</span>
+                  </a>
+                  <a class="flag" href="https://id.marketamerica.com/ranix" title="Indonesia">
+                    <span class="flag-rect"><img src="flags/id.svg" alt="Indonesia" width="640" height="480" /></span>
+                    <span>ID</span>
+                  </a>
+                  <a class="flag" href="https://sg.marketamerica.com/ranix" title="Singapore">
+                    <span class="flag-rect"><img src="flags/sg.svg" alt="Singapore" width="640" height="480" /></span>
+                    <span>SG</span>
+                  </a>
+                  <a class="flag" href="https://tw.marketamerica.com/ranix" title="Taiwan">
+                    <span class="flag-rect"><img src="flags/tw.svg" alt="Taiwan" width="640" height="480" /></span>
+                    <span>TW</span>
+                  </a>
+                  <a class="flag" href="https://hk.marketamerica.com/ranix" title="Hong Kong">
+                    <span class="flag-rect"><img src="flags/hk.svg" alt="Hong Kong" width="640" height="480" /></span>
+                    <span>HK</span>
+                  </a>
+                  <a class="flag" href="https://au.marketamerica.com/ranix" title="Australia">
+                    <span class="flag-rect"><img src="flags/au.svg" alt="Australia" width="640" height="480" /></span>
+                    <span>AU</span>
+                  </a>
+                </div>
+              </div>
+              <div class="back-footer">
+                <p class="id">Ranix · 林晧與</p>
+                <p class="legal">Independent UnFranchise Owner<br />獨立超連鎖店主 · 美安</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint">
+      Print at 100% scale, no “fit to page”. Front QR opens WhatsApp. Flag icons on this page are live links.
+      Pattern: <code>my.marketamerica.com/ranix</code>, <code>id</code>, <code>sg</code>, <code>tw</code>, <code>hk</code>, <code>au</code>.
+    </p>
+  </main>
+
+  <script>
+    function printMode(mode) {
+      let pageStyle = document.getElementById("print-page");
+      if (!pageStyle) {
+        pageStyle = document.createElement("style");
+        pageStyle.id = "print-page";
+        document.head.appendChild(pageStyle);
+      }
+      pageStyle.textContent = mode === "print-proof"
+        ? "@media print { @page { size: A4 landscape; margin: 14mm; } }"
+        : "@media print { @page { size: 90mm 54mm; margin: 0; } }";
+
+      document.body.classList.remove("print-front", "print-back", "print-proof");
+      document.body.classList.add(mode);
+      window.print();
+      setTimeout(() => {
+        document.body.classList.remove("print-front", "print-back", "print-proof");
+      }, 400);
+    }
+
+    document.getElementById("printFront").onclick = () => printMode("print-front");
+    document.getElementById("printBack").onclick = () => printMode("print-back");
+    document.getElementById("printProof").onclick = () => printMode("print-proof");
+  </script>
+</body>
+</html>
