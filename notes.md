@@ -68,3 +68,4 @@
 - 國旗：4:3 長方形，背面 2 列 × 3 欄（MY ID SG / TW HK AU）
 - 正面 QR：WhatsApp（趕路時最容易立刻傳訊）
 - 電子名片：`digital-card.html` + `ranix.vcf`（手機直式、WhatsApp／加入通訊錄／分享連結）
+- 出血：紙卡可調 0–5 mm（預設 3 mm）；左色帶＋紙色延伸進出血區，裁切只變色帶粗細、不露白邊

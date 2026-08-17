@@ -16,6 +16,11 @@
       --muted: #5c6570;
       --line: rgba(11, 31, 58, 0.14);
       --gold: #b0894f;
+      --bleed: 3mm;
+      --trim-w: 90mm;
+      --trim-h: 54mm;
+      --stripe: 2.1mm;
+      --mark: 5mm;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -70,6 +75,25 @@
     .toolbar button:hover,
     .toolbar a:hover { background: rgba(255,255,255,0.16); }
 
+    .toolbar .bleed-ctrl {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-left: 0.25rem;
+      font-size: 0.78rem;
+    }
+
+    .toolbar .bleed-ctrl input[type="range"] {
+      width: 6.8rem;
+      accent-color: #8ec0ea;
+    }
+
+    .toolbar .bleed-ctrl output {
+      min-width: 3.6rem;
+      font-variant-numeric: tabular-nums;
+      opacity: 0.9;
+    }
+
     .stage {
       max-width: 980px;
       margin: 0 auto;
@@ -110,31 +134,109 @@
     }
 
     .card-wrap {
-      width: 90mm;
+      position: relative;
+      width: calc(var(--trim-w) + 2 * var(--bleed));
+      height: calc(var(--trim-h) + 2 * var(--bleed));
+      margin: var(--mark);
+      overflow: visible;
+    }
+
+    body.no-bleed .card-wrap {
+      margin: 0;
       filter: drop-shadow(0 16px 28px rgba(11, 31, 58, 0.14));
     }
 
     .card {
-      width: 90mm;
-      height: 54mm;
+      width: 100%;
+      height: 100%;
       background: var(--paper);
       position: relative;
       overflow: hidden;
-      border-radius: 1.2mm;
+      border-radius: 0;
     }
 
+    body.no-bleed .card { border-radius: 1.2mm; }
+
+    /* Stripe continues through left + top/bottom bleed so a mis-cut only
+       changes apparent thickness, never leaves a white edge. */
     .card::before {
       content: "";
       position: absolute;
-      inset: 0 auto 0 0;
-      width: 2.1mm;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: calc(var(--bleed) + var(--stripe));
       background: linear-gradient(180deg, var(--navy), var(--blue));
     }
 
     .front, .back {
+      position: relative;
+      z-index: 1;
       height: 100%;
-      padding: 4.2mm 5mm 4mm 6.2mm;
+      padding:
+        calc(var(--bleed) + 4.2mm)
+        calc(var(--bleed) + 5mm)
+        calc(var(--bleed) + 4mm)
+        calc(var(--bleed) + 6.2mm);
     }
+
+    .trim {
+      position: absolute;
+      inset: var(--bleed);
+      border: 0.16mm dashed #e11d74;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .bleed-veil {
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 0 var(--bleed) rgba(225, 29, 116, 0.12);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .crop {
+      position: absolute;
+      width: var(--mark);
+      height: var(--mark);
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .crop::before,
+    .crop::after {
+      content: "";
+      position: absolute;
+      background: #1a1a1a;
+    }
+
+    .crop.tl { left: calc(var(--bleed) - var(--mark)); top: calc(var(--bleed) - var(--mark)); }
+    .crop.tr { right: calc(var(--bleed) - var(--mark)); top: calc(var(--bleed) - var(--mark)); }
+    .crop.bl { left: calc(var(--bleed) - var(--mark)); bottom: calc(var(--bleed) - var(--mark)); }
+    .crop.br { right: calc(var(--bleed) - var(--mark)); bottom: calc(var(--bleed) - var(--mark)); }
+
+    .crop.tl::before, .crop.tr::before, .crop.bl::before, .crop.br::before {
+      width: 100%;
+      height: 0.18mm;
+    }
+    .crop.tl::after, .crop.tr::after, .crop.bl::after, .crop.br::after {
+      height: 100%;
+      width: 0.18mm;
+    }
+
+    .crop.tl::before { right: 0; bottom: 0; }
+    .crop.tl::after { right: 0; bottom: 0; }
+    .crop.tr::before { left: 0; bottom: 0; }
+    .crop.tr::after { left: 0; bottom: 0; }
+    .crop.bl::before { right: 0; top: 0; }
+    .crop.bl::after { right: 0; top: 0; }
+    .crop.br::before { left: 0; top: 0; }
+    .crop.br::after { left: 0; top: 0; }
+
+    body.no-bleed .trim,
+    body.no-bleed .bleed-veil,
+    body.no-bleed .crop { display: none; }
 
     .front {
       display: grid;
@@ -380,6 +482,12 @@
       .toolbar, .page-title, .lead, .hint, .caption { display: none !important; }
       .stage, .spread, .side, .card-wrap { margin: 0; filter: none; max-width: none; }
       .card { border-radius: 0; }
+      body.print-front .trim,
+      body.print-front .bleed-veil,
+      body.print-front .crop,
+      body.print-back .trim,
+      body.print-back .bleed-veil,
+      body.print-back .crop { display: none !important; }
       body.print-front .back-side,
       body.print-back .front-side { display: none !important; }
       body.print-front .spread,
@@ -401,11 +509,16 @@
     <button type="button" id="printBack">Print back</button>
     <button type="button" id="printProof">Print A4 proof</button>
     <a href="digital-card.html">Digital card</a>
+    <label class="bleed-ctrl">
+      <span class="label">出血</span>
+      <input type="range" id="bleed" min="0" max="5" step="0.5" value="3" />
+      <output id="bleedOut" for="bleed">3 mm</output>
+    </label>
   </div>
 
   <main class="stage">
     <h1 class="page-title">Shopping consultant card</h1>
-    <p class="lead">90 × 54 mm. Front is identity for a hurried handoff; back uses country flags for each Market America shop. No SHOP.COM. Official logo omitted so this stays an independent-owner card.</p>
+    <p class="lead">90 × 54 mm trim, with adjustable bleed (default 3 mm). The navy edge and paper color run past the cut so a mis-cut only changes stripe thickness — no white flash. Pink overlay = bleed; dashed line = trim.</p>
 
     <div class="spread">
       <div class="side front-side">
@@ -436,6 +549,12 @@
               </a>
             </div>
           </article>
+          <div class="trim" aria-hidden="true"></div>
+          <div class="bleed-veil" aria-hidden="true"></div>
+          <span class="crop tl"></span>
+          <span class="crop tr"></span>
+          <span class="crop bl"></span>
+          <span class="crop br"></span>
         </div>
       </div>
 
@@ -483,18 +602,36 @@
               </div>
             </div>
           </article>
+          <div class="trim" aria-hidden="true"></div>
+          <div class="bleed-veil" aria-hidden="true"></div>
+          <span class="crop tl"></span>
+          <span class="crop tr"></span>
+          <span class="crop bl"></span>
+          <span class="crop br"></span>
         </div>
       </div>
     </div>
 
     <p class="hint">
-      Print at 100% scale, no “fit to page”. Front QR opens WhatsApp. Flag icons on this page are live links.
-      Pattern: <code>my.marketamerica.com/ranix</code>, <code>id</code>, <code>sg</code>, <code>tw</code>, <code>hk</code>, <code>au</code>.
+      Print at 100% scale, no “fit to page”. Print front/back sends the bleed sheet to the printer (crop marks off). A4 proof keeps trim marks. The left stripe extends into bleed on all three outer edges.
     </p>
   </main>
 
   <script>
+    function bleedMm() {
+      return parseFloat(document.getElementById("bleed").value) || 0;
+    }
+
+    function applyBleed(mm) {
+      document.documentElement.style.setProperty("--bleed", mm + "mm");
+      document.getElementById("bleedOut").value = mm + " mm";
+      document.body.classList.toggle("no-bleed", Number(mm) === 0);
+    }
+
     function printMode(mode) {
+      const b = bleedMm();
+      const w = 90 + 2 * b;
+      const h = 54 + 2 * b;
       let pageStyle = document.getElementById("print-page");
       if (!pageStyle) {
         pageStyle = document.createElement("style");
@@ -502,8 +639,8 @@
         document.head.appendChild(pageStyle);
       }
       pageStyle.textContent = mode === "print-proof"
-        ? "@media print { @page { size: A4 landscape; margin: 14mm; } }"
-        : "@media print { @page { size: 90mm 54mm; margin: 0; } }";
+        ? "@media print { @page { size: A4 landscape; margin: 12mm; } }"
+        : `@media print { @page { size: ${w}mm ${h}mm; margin: 0; } }`;
 
       document.body.classList.remove("print-front", "print-back", "print-proof");
       document.body.classList.add(mode);
@@ -512,6 +649,10 @@
         document.body.classList.remove("print-front", "print-back", "print-proof");
       }, 400);
     }
+
+    const bleedInput = document.getElementById("bleed");
+    applyBleed(bleedInput.value);
+    bleedInput.addEventListener("input", () => applyBleed(bleedInput.value));
 
     document.getElementById("printFront").onclick = () => printMode("print-front");
     document.getElementById("printBack").onclick = () => printMode("print-back");
