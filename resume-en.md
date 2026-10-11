@@ -1,6 +1,7 @@
 # HAO YU LIN
 
-Email: john220john220@gmail.com  
+Email: john220john220au@gmail.com<br>
+Phone: +61 403 295 045<br>
 Location: Australia (available for local work)  
 Languages: Mandarin (native), English (professional working — meeting-level), Indonesian (conversational)
 

@@ -95,6 +95,11 @@
       color: #ffd0d0;
     }
 
+    .toolbar button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
     .toolbar .spacer { flex: 1; }
 
     .toolbar .status {
@@ -442,6 +447,8 @@
       <span class="label">Preset</span>
       <select id="presetSelect" title="Switch tailored resume version"></select>
     </label>
+    <button type="button" id="btnAddPreset" title="Save current resume as a new preset">+ Preset</button>
+    <button type="button" id="btnDeletePreset" class="ghost-danger" title="Delete selected custom preset">Delete preset</button>
     <button type="button" id="btnPrint">Print / PDF</button>
     <div class="spacer"></div>
     <span class="status" id="saveStatus">Ready</span>
@@ -455,7 +462,8 @@
         <p class="tagline editable" data-field="tagline" contenteditable="false">Working Holiday — Hospitality · Retail · Operations</p>
       </div>
       <div class="meta">
-        <span><a href="mailto:john220john220@gmail.com" class="editable" data-field="email" contenteditable="false">john220john220@gmail.com</a></span>
+        <span><a href="mailto:john220john220au@gmail.com" class="editable" data-field="email" contenteditable="false">john220john220au@gmail.com</a></span>
+        <span><a href="tel:+61403295045" class="editable" data-field="phone" contenteditable="false">+61 403 295 045</a></span>
         <span class="editable" data-field="location" contenteditable="false">Australia · Available for local work</span>
         <span class="editable" data-field="languages" contenteditable="false">EN · ZH · ID</span>
       </div>
@@ -502,7 +510,7 @@
       </div>
     </section>
 
-    <p class="hint">Choose a preset, then edit if needed. Drag ⋮⋮ in Edit mode to reorder. Changes auto-save in this browser. Print hides editor chrome.</p>
+    <p class="hint">Choose a preset, then edit if needed. Use + Preset to save the current resume as a custom preset; Delete preset removes custom ones only. Drag ⋮⋮ in Edit mode to reorder. Changes auto-save in this browser. Print hides editor chrome.</p>
   </main>
 
   <script src="./resume-presets.js"></script>
@@ -513,8 +521,10 @@
     }
 
     const STORAGE_KEY = PresetStore.storageKey;
+    const CUSTOM_PRESETS_KEY = PresetStore.storageKey + "-custom-presets";
     const DEFAULT_PRESET_ID = PresetStore.defaultId;
 
+    let customPresets = loadCustomPresets();
     let data = loadData();
     let editing = false;
     let saveTimer = null;
@@ -528,6 +538,8 @@
       btnEdit: document.getElementById("btnEdit"),
       btnPrint: document.getElementById("btnPrint"),
       btnReset: document.getElementById("btnReset"),
+      btnAddPreset: document.getElementById("btnAddPreset"),
+      btnDeletePreset: document.getElementById("btnDeletePreset"),
       saveStatus: document.getElementById("saveStatus"),
       presetSelect: document.getElementById("presetSelect")
     };
@@ -544,8 +556,50 @@
         .replaceAll('"', "&quot;");
     }
 
+    function cloneResumeContent(doc) {
+      const copy = structuredClone(doc);
+      delete copy.presetId;
+      return copy;
+    }
+
+    function loadCustomPresets() {
+      try {
+        const raw = localStorage.getItem(CUSTOM_PRESETS_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed
+          .filter((p) => p && typeof p.id === "string" && typeof p.label === "string" && p.resume)
+          .map((p) => ({ id: p.id, label: p.label, resume: p.resume, custom: true }));
+      } catch {
+        return [];
+      }
+    }
+
+    function saveCustomPresets() {
+      localStorage.setItem(CUSTOM_PRESETS_KEY, JSON.stringify(customPresets));
+    }
+
+    function getCatalog() {
+      return [
+        ...PresetStore.catalog.map((p) => ({ ...p, custom: false })),
+        ...customPresets
+      ];
+    }
+
+    function getPresetById(id) {
+      return getCatalog().find((p) => p.id === id) || null;
+    }
+
+    function buildDocument(id) {
+      const entry = getPresetById(id) || getPresetById(DEFAULT_PRESET_ID);
+      const doc = structuredClone(entry.resume);
+      doc.presetId = entry.id;
+      return doc;
+    }
+
     function cloneDefaultDocument() {
-      return PresetStore.buildDocument(DEFAULT_PRESET_ID);
+      return buildDocument(DEFAULT_PRESET_ID);
     }
 
     function loadData() {
@@ -555,9 +609,11 @@
         const parsed = JSON.parse(raw);
         const base = cloneDefaultDocument();
         const presetId =
-          parsed.presetId && PresetStore.getById(parsed.presetId)
+          parsed.presetId && getPresetById(parsed.presetId)
             ? parsed.presetId
             : DEFAULT_PRESET_ID;
+        // Update the previous default contact while preserving personalised emails.
+        if (parsed.email === "john220john220@gmail.com") parsed.email = base.email;
         return { ...base, ...parsed, presetId };
       } catch {
         return cloneDefaultDocument();
@@ -565,27 +621,36 @@
     }
 
     function fillPresetSelect() {
-      el.presetSelect.innerHTML = PresetStore.catalog
-        .map(
-          (p) =>
-            `<option value="${escapeHtml(p.id)}">${escapeHtml(p.label)}</option>`
-        )
+      el.presetSelect.innerHTML = getCatalog()
+        .map((p) => {
+          const mark = p.custom ? " (custom)" : "";
+          return `<option value="${escapeHtml(p.id)}">${escapeHtml(p.label)}${mark}</option>`;
+        })
         .join("");
+      syncDeletePresetButton();
     }
 
     function presetLabel(id) {
-      return PresetStore.getById(id)?.label || id;
+      return getPresetById(id)?.label || id;
     }
 
     function syncPresetSelect() {
-      const id = PresetStore.getById(data.presetId)
-        ? data.presetId
-        : DEFAULT_PRESET_ID;
+      const id = getPresetById(data.presetId) ? data.presetId : DEFAULT_PRESET_ID;
       el.presetSelect.value = id;
+      syncDeletePresetButton();
+    }
+
+    function syncDeletePresetButton() {
+      const entry = getPresetById(el.presetSelect.value || data.presetId);
+      const canDelete = !!(entry && entry.custom);
+      el.btnDeletePreset.disabled = !canDelete;
+      el.btnDeletePreset.title = canDelete
+        ? "Delete selected custom preset"
+        : "Built-in presets can’t be deleted";
     }
 
     function applyPreset(id, { confirmReplace = true } = {}) {
-      const entry = PresetStore.getById(id);
+      const entry = getPresetById(id);
       if (!entry) {
         syncPresetSelect();
         return;
@@ -599,11 +664,58 @@
         syncPresetSelect();
         return;
       }
-      data = PresetStore.buildDocument(entry.id);
+      data = buildDocument(entry.id);
       scheduleSave();
       renderLists();
       syncPresetSelect();
       el.saveStatus.textContent = "Preset: " + entry.label;
+    }
+
+    function addPresetFromCurrent() {
+      const label = prompt("Name for the new preset:", "Custom");
+      if (label === null) return;
+      const trimmed = label.trim();
+      if (!trimmed) {
+        alert("Preset name can’t be empty.");
+        return;
+      }
+      if (getCatalog().some((p) => p.label.toLowerCase() === trimmed.toLowerCase())) {
+        if (!confirm(`A preset named “${trimmed}” already exists. Create another with the same name?`)) {
+          return;
+        }
+      }
+      const id = uid("preset");
+      customPresets.push({
+        id,
+        label: trimmed,
+        resume: cloneResumeContent(data),
+        custom: true
+      });
+      saveCustomPresets();
+      data.presetId = id;
+      scheduleSave();
+      fillPresetSelect();
+      syncPresetSelect();
+      el.saveStatus.textContent = "Preset added: " + trimmed;
+    }
+
+    function deleteSelectedPreset() {
+      const id = el.presetSelect.value || data.presetId;
+      const entry = getPresetById(id);
+      if (!entry) return;
+      if (!entry.custom) {
+        alert("Built-in presets can’t be deleted.");
+        return;
+      }
+      if (!confirm(`Delete custom preset “${entry.label}”?\n\nThis cannot be undone.`)) return;
+      customPresets = customPresets.filter((p) => p.id !== id);
+      saveCustomPresets();
+      data = buildDocument(DEFAULT_PRESET_ID);
+      scheduleSave();
+      fillPresetSelect();
+      syncPresetSelect();
+      renderLists();
+      el.saveStatus.textContent = "Preset deleted";
     }
 
     function scheduleSave() {
@@ -611,6 +723,11 @@
       clearTimeout(saveTimer);
       saveTimer = setTimeout(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        const custom = customPresets.find((p) => p.id === data.presetId);
+        if (custom) {
+          custom.resume = cloneResumeContent(data);
+          saveCustomPresets();
+        }
         el.saveStatus.textContent = "Saved";
       }, 250);
     }
@@ -639,6 +756,9 @@
         node.textContent = data[key];
         if (key === "email" && node.tagName === "A") {
           node.href = "mailto:" + data.email;
+        }
+        if (key === "phone" && node.tagName === "A") {
+          node.href = "tel:" + data.phone.replace(/[^+\d]/g, "");
         }
       });
     }
@@ -753,6 +873,9 @@
           data[key] = node.textContent.trim();
           if (key === "email" && node.tagName === "A") {
             node.href = "mailto:" + data.email;
+          }
+          if (key === "phone" && node.tagName === "A") {
+            node.href = "tel:" + data.phone.replace(/[^+\d]/g, "");
           }
           scheduleSave();
         };
@@ -1071,6 +1194,8 @@
     el.presetSelect.addEventListener("change", () => {
       applyPreset(el.presetSelect.value, { confirmReplace: true });
     });
+    el.btnAddPreset.addEventListener("click", () => addPresetFromCurrent());
+    el.btnDeletePreset.addEventListener("click", () => deleteSelectedPreset());
     el.btnReset.addEventListener("click", () => {
       const id = el.presetSelect.value || data.presetId || DEFAULT_PRESET_ID;
       const label = presetLabel(id);

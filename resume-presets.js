@@ -6,7 +6,8 @@
 (function (global) {
   const profile = {
     name: "HAO YU LIN",
-    email: "john220john220@gmail.com",
+    email: "john220john220au@gmail.com",
+    phone: "+61 403 295 045",
     location: "Australia · Available for local work",
     languages: "EN · ZH · ID",
     summaryTitle: "Professional Summary",
