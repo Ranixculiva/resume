@@ -159,6 +159,62 @@
           { id: "sk-6", label: "Certificate", text: "Chinese Cuisine (non-vegetarian), Class C" }
         ]
       })
+    },
+    {
+      id: "engineering",
+      label: "Engineering / iOS",
+      resume: resume({
+        tagline: "iOS Software Engineer — Swift · SwiftUI · Image Processing",
+        summary:
+          "iOS software engineer with professional experience at Perfect Corp. developing photo-editing interfaces, reusable SwiftUI components and Core Image processing workflows. Previously maintained a cybersecurity product and restored automated testing at Trend Micro, with internship experience migrating Jenkins scripts to GitHub Actions. Holds a master's degree in Computer Science and a bachelor's degree in Mathematics.",
+        skillsTitle: "Technical Skills",
+        jobs: [
+          {
+            id: "job-perfect",
+            title: "iOS Software Engineer",
+            dates: "Jun 2024 – Jul 2026",
+            org: "Perfect Corp. · Taiwan",
+            note: "",
+            bullets: [
+              "Resolved 98 tracked bugs over four months and added UI tests for blur, clone and blending tools.",
+              "Developed a reusable SwiftUI category scrolling component with configurable styles, protocol-based data sources and managed download workers.",
+              "Implemented custom scroll position restoration to preserve the browsing position during dynamic favourite updates in frame selection.",
+              "Implemented custom Core Image mask compositing and animated SwiftUI controls for an object-removal smart selection workflow.",
+              "Built object-aware thumbnails using mask bounding boxes, image cropping and Core Image filters for selective colour editing.",
+              "Contributed to background content categories, multi-face makeup synchronisation and text editing features."
+            ]
+          },
+          {
+            id: "job-trend",
+            title: "Software Engineer",
+            dates: "Sep 2023 – Mar 2024",
+            org: "Trend Micro · Taiwan",
+            note: "",
+            bullets: [
+              "Maintained a cybersecurity product and supported its engineering handover to the Taiwan team.",
+              "Restored an automated testing workflow despite limited documentation and set up an Active Directory environment for product SSO login testing."
+            ]
+          },
+          {
+            id: "job-trend-intern",
+            title: "Software Engineering Intern",
+            dates: "Jul 2022 – Aug 2022",
+            org: "Trend Micro · Taiwan",
+            note: "",
+            bullets: [
+              "Migrated three Jenkins scripts to GitHub Actions during a two-month internship.",
+              "Built a coding-challenge-style application while learning GitHub Actions in less than two weeks."
+            ]
+          }
+        ],
+        skills: [
+          { id: "sk-ios", label: "iOS", text: "Swift, SwiftUI, Objective-C, TextKit 2" },
+          { id: "sk-graphics", label: "Graphics", text: "Core Image, Core Text, CIColorKernel, Metal shaders, Core Motion" },
+          { id: "sk-testing", label: "Testing & CI", text: "UI testing, Robot Framework, GitHub Actions, Jenkins" },
+          { id: "sk-trend", label: "Software", text: "Python, PHP, PostgreSQL, Linux, Active Directory / SSO testing" },
+          { id: "sk-practices", label: "Practices", text: "MVC / MVVM, reusable UI components, Scrum, pull requests, code review" }
+        ]
+      })
     }
   ];
 
