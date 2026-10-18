@@ -15,6 +15,13 @@ Adaptable professional with paid kitchen experience, cross-cultural sales and te
 
 ## Work Experience
 
+### Kitchen Assistant — Sushi Cuckoo, Rockingham
+**Sep 2026 – Present**
+
+- Worked at the fryer station to prepare fried food items.
+- Assembled meals for service.
+- Prepared ingredients for kitchen operations.
+
 ### Cook — Omelette (Brunch Restaurant)
 **Jun 2025 – Jul 2026**
 
@@ -60,3 +67,7 @@ National Tsing Hua University, Taiwan | 2016 – 2020
 - Tools: Google Forms, Excel
 - Driver’s licence: manual transmission (small vehicle)
 - Certificate: Chinese Cuisine (non-vegetarian), Class C
+- HLTAID012 – Provide First Aid in an education and care setting
+- HLTAID011 – Provide First Aid
+- HLTAID010 – Provide basic emergency life support
+- HLTAID009 – Provide cardiopulmonary resuscitation

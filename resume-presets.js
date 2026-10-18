@@ -32,6 +32,18 @@
 
   /** Reusable job blocks for authors of this file only (not used by app logic). */
   const jobs = {
+    sushi: {
+      id: "job-sushi",
+      title: "Kitchen Assistant",
+      dates: "Sep 2026 – Present",
+      org: "Sushi Cuckoo, Rockingham",
+      note: "",
+      bullets: [
+        "Worked at the fryer station to prepare fried food items.",
+        "Assembled meals for service.",
+        "Prepared ingredients for kitchen operations."
+      ]
+    },
     cook: {
       id: "job-cook",
       title: "Cook",
@@ -112,8 +124,12 @@
         tagline: "Working Holiday — Hospitality · Retail · Operations",
         summary:
           "Adaptable professional with paid kitchen experience, cross-cultural sales and team-building, and degrees in Mathematics and Computer Science. Comfortable in fast-paced service environments, quick to learn new processes, and effective with multicultural teams. Seeking flexible Working Holiday roles across hospitality, retail, warehouse, farm, and customer-facing work.",
-        jobs: [jobs.cook, jobs.ufo, jobs.military],
+        jobs: [jobs.sushi, jobs.cook, jobs.ufo, jobs.military],
         skills: [
+          { id: "sk-first-aid-1", label: "First Aid", text: "HLTAID012 – Provide First Aid in an education and care setting" },
+          { id: "sk-first-aid-2", label: "First Aid", text: "HLTAID011 – Provide First Aid" },
+          { id: "sk-first-aid-3", label: "First Aid", text: "HLTAID010 – Provide basic emergency life support" },
+          { id: "sk-first-aid-4", label: "First Aid", text: "HLTAID009 – Provide cardiopulmonary resuscitation" },
           { id: "sk-1", label: "Kitchen", text: "Omelettes, pasta, egg dishes, prep, cleaning, peak service" },
           { id: "sk-2", label: "People", text: "Cross-cultural communication & facilitation (EN / ZH / ID)" },
           { id: "sk-3", label: "Business", text: "Retail support, customer follow-up, team recruitment & training" },
@@ -131,8 +147,12 @@
         summary:
           "Cook with paid brunch-kitchen experience, a Chinese cuisine certificate, and a track record of training teammates under peak service. Reliable with prep, cooking, cleaning, and ticket speed. Seeking Cook, Kitchen Hand, or café/hospitality roles in Australia.",
         sectionOrder: ["summary", "experience", "skills", "education"],
-        jobs: [jobs.cook, jobs.military, jobs.ufoShort],
+        jobs: [jobs.sushi, jobs.cook, jobs.military, jobs.ufoShort],
         skills: [
+          { id: "sk-first-aid-1", label: "First Aid", text: "HLTAID012 – Provide First Aid in an education and care setting" },
+          { id: "sk-first-aid-2", label: "First Aid", text: "HLTAID011 – Provide First Aid" },
+          { id: "sk-first-aid-3", label: "First Aid", text: "HLTAID010 – Provide basic emergency life support" },
+          { id: "sk-first-aid-4", label: "First Aid", text: "HLTAID009 – Provide cardiopulmonary resuscitation" },
           { id: "sk-6", label: "Certificate", text: "Chinese Cuisine (non-vegetarian), Class C" },
           { id: "sk-1", label: "Kitchen", text: "Omelettes, pasta, egg dishes, prep, dishwashing, peak plating, cleaning" },
           { id: "sk-2", label: "Service", text: "Fast-paced brunch service, quality control, training new staff" },
@@ -150,8 +170,12 @@
         summary:
           "Reliable worker with early-shift kitchen stamina, a manual driver’s licence, and logistics experience coordinating transport and cash reconciliation for 100+ people. Process-oriented, accurate with counts, and comfortable with physical outdoor or warehouse work. Seeking farm, packing, warehouse, or general labour roles in Australia.",
         sectionOrder: ["summary", "experience", "skills", "education"],
-        jobs: [jobs.military, jobs.cookPhysical, jobs.ufoShort],
+        jobs: [jobs.sushi, jobs.military, jobs.cookPhysical, jobs.ufoShort],
         skills: [
+          { id: "sk-first-aid-1", label: "First Aid", text: "HLTAID012 – Provide First Aid in an education and care setting" },
+          { id: "sk-first-aid-2", label: "First Aid", text: "HLTAID011 – Provide First Aid" },
+          { id: "sk-first-aid-3", label: "First Aid", text: "HLTAID010 – Provide basic emergency life support" },
+          { id: "sk-first-aid-4", label: "First Aid", text: "HLTAID009 – Provide cardiopulmonary resuscitation" },
           { id: "sk-5", label: "Licence", text: "Manual transmission — small vehicle" },
           { id: "sk-ops", label: "Operations", text: "Registration lists, fare tracking, cash collection, reconciliation for 100+ people" },
           { id: "sk-4", label: "Tools", text: "Google Forms, Excel — process improvement without on-site computers" },
